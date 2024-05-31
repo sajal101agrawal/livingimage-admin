@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Sajal Agrawal",
   "scripts": {
-    "build": "vite build",
+    "build": "CI=false vite build",
     "lint": "eslint \"src/**/*.js\"",
     "serve": "vite preview",
     "start": "vite"
