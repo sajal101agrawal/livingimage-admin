@@ -197,7 +197,7 @@ const UserList = () => {
                         <CTableDataCell>{user['Registered on']}</CTableDataCell>
                         <CTableDataCell>{user['Verification Status'] ? 'Verified' : 'Not Verified'}</CTableDataCell>
                         <CTableDataCell>
-                        <CButton style={{marginRight:"10px"}} color="info" size="sm" onClick={() => handleView(user['User ID'])}>
+                        <CButton style={{marginRight:"10px"}} color="info" size="sm" onClick={() => handleView(user['User Email'])}>
                             View
                           </CButton>
                           <CButton color="danger" size="sm" onClick={() => confirmDelete(user)}>

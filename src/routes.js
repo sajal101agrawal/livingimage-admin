@@ -5,6 +5,8 @@ const Users = React.lazy(() => import('./views/pages/AllUsers'))
 const RegeneratedImages = React.lazy(() => import('./views/pages/RegeneratedImages'))
 const OriginalImages = React.lazy(() => import('./views/pages/OriginalImages'))
 const ViewImage = React.lazy(() => import('./views/pages/ViewImage'))
+const ViewUser = React.lazy(() => import('./views/pages/ViewUser'))
+
 
 
 
@@ -15,9 +17,11 @@ const routes = [
   { path: '/regenerated-images', name: 'Regenerated Images', element: RegeneratedImages },
   { path: '/original-images', name: 'Original Images', element: OriginalImages },
   { path: '/view-image', name: 'View Image', element: ViewImage },
+  { path: '/user/:id', name: 'View User', element: ViewUser },
 
 
 
+  
 ]
 
 export default routes
