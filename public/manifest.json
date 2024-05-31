@@ -1,0 +1,15 @@
+{
+  "short_name": "Livingimage | Admin",
+  "name": "Livingimage | Admin",
+  "icons": [
+    {
+      "src": "./logo.svg",
+      "sizes": "100x100",
+      "type": "image/svg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
