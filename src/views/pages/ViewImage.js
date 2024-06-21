@@ -9,6 +9,11 @@ import {
   CRow,
   CSpinner,
   CAlert,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from '@coreui/react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -19,6 +24,10 @@ const ViewImage = () => {
   const [regeneratedImage, setRegeneratedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -72,6 +81,42 @@ const ViewImage = () => {
     }
   };
 
+  const openDeleteModal = (image) => {
+    setImageToDelete(image);
+    setDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setImageToDelete(null);
+    setDeleteModal(false);
+  };
+
+  const deleteImage = async () => {
+    setDeleteLoading(true);
+    const accessToken = localStorage.getItem('AccessToken');
+    try {
+      await axios.post(
+        'https://api.livingimage.io/api/admin/delete-image/',
+        { image_id: [imageToDelete.original_image_id] },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      setSuccessMsg('Image deleted successfully');
+      setOriginalImage(null);
+      setRegeneratedImage(null);
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setErrorMsg(error?.response?.data?.errors?.detail || 'Failed to delete image');
+    } finally {
+      setDeleteLoading(false);
+      closeDeleteModal();
+    }
+  };
+
   return (
     <CContainer>
       <CRow>
@@ -82,13 +127,14 @@ const ViewImage = () => {
             </CCardHeader>
             <CCardBody>
               {errorMsg && <CAlert color="danger">{errorMsg}</CAlert>}
+              {successMsg && <CAlert color="success">{successMsg}</CAlert>}
               {loading ? (
                 <div className="text-center">
                   <CSpinner color="primary" />
                 </div>
               ) : (
                 <CRow>
-                    <CCol md="6" className="mb-4">
+                  <CCol md="6" className="mb-4">
                     <CCard>
                       <CCardHeader>
                         <strong>Regenerated Image</strong>
@@ -112,6 +158,9 @@ const ViewImage = () => {
                         ) : (
                           <p>No regenerated image found</p>
                         )}
+                        <CButton color="danger" onClick={() => openDeleteModal(regeneratedImage)}>
+                          Delete
+                        </CButton>
                       </CCardBody>
                     </CCard>
                   </CCol>
@@ -123,11 +172,30 @@ const ViewImage = () => {
                       <CCardBody>
                         {originalImage ? (
                           <>
-                            <img
-                              src={originalImage.original_image}
-                              alt={originalImage.original_image_name}
-                              className="img-fluid"
-                            />
+                            {originalImage.original_image ? (
+                              <img
+                                src={originalImage.original_image}
+                                alt={originalImage.original_image_name}
+                                className="img-fluid"
+                              />
+                            ) : (
+                              <span
+                                className="card-img-top"
+                                style={{
+                                  background: '#f8f7f7',
+                                  textAlign: 'center',
+                                  fontSize: '1rem',
+                                  minHeight: '200px',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  color: 'black',
+                                  padding: '10px',
+                                }}
+                              >
+                                {originalImage.prompt}
+                              </span>
+                            )}
                             <hr />
                             <p><strong>User:</strong> {originalImage.user}</p>
                             <p><strong>Image ID:</strong> {originalImage.original_image_id}</p>
@@ -143,16 +211,35 @@ const ViewImage = () => {
                         ) : (
                           <p>No original image found</p>
                         )}
+                        <CButton color="danger" onClick={() => openDeleteModal(originalImage)}>
+                          Delete
+                        </CButton>
                       </CCardBody>
                     </CCard>
                   </CCol>
-                  
                 </CRow>
               )}
             </CCardBody>
           </CCard>
         </CCol>
       </CRow>
+
+      <CModal visible={deleteModal} onClose={closeDeleteModal}>
+        <CModalHeader onClose={closeDeleteModal}>
+          <CModalTitle>Delete Confirmation</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          Are you sure you want to delete the image "{imageToDelete?.original_image_name}"?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeDeleteModal}>
+            Cancel
+          </CButton>
+          <CButton color="danger" onClick={deleteImage} disabled={deleteLoading}>
+            {deleteLoading ? <CSpinner size="sm" /> : 'Delete'}
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </CContainer>
   );
 };

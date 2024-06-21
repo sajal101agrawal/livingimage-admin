@@ -6,6 +6,8 @@ const RegeneratedImages = React.lazy(() => import('./views/pages/RegeneratedImag
 const OriginalImages = React.lazy(() => import('./views/pages/OriginalImages'))
 const ViewImage = React.lazy(() => import('./views/pages/ViewImage'))
 const ViewUser = React.lazy(() => import('./views/pages/ViewUser'))
+const Payments = React.lazy(() => import('./views/pages/Payments'))
+
 
 
 
@@ -18,6 +20,8 @@ const routes = [
   { path: '/original-images', name: 'Original Images', element: OriginalImages },
   { path: '/view-image', name: 'View Image', element: ViewImage },
   { path: '/user/:id', name: 'View User', element: ViewUser },
+  { path: '/payments', name: 'All Payments', element: Payments },
+
 
 
 

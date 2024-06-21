@@ -54,6 +54,20 @@ const _nav = [
 
 
 
+  {
+    component: CNavTitle,
+    name: 'Payments',
+  },
+  {
+    component: CNavItem,
+    name: 'All Payments',
+    to: '/payments',
+    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+  },
+
+
+
+
 
 ]
 
