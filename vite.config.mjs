@@ -15,6 +15,14 @@ export default defineConfig(({ mode }) => {
           autoprefixer({}), // add options if needed
         ],
       },
+      preprocessorOptions: {
+        scss: {
+          charset: false
+        }
+      }
+    },
+    build: {
+      minify: false
     },
     esbuild: {
       loader: 'jsx',
