@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
     base: './',
     build: {
       outDir: 'build',
+      minify: false
     },
     css: {
       postcss: {
@@ -20,9 +21,6 @@ export default defineConfig(({ mode }) => {
           charset: false
         }
       }
-    },
-    build: {
-      minify: false
     },
     esbuild: {
       loader: 'jsx',
